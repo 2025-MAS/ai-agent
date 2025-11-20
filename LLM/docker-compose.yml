@@ -1,0 +1,23 @@
+services:
+  ai-agent-llm:
+    build: .
+    image: ai-agent-llm:latest
+    container_name: ai-agent-llm
+    privileged: true
+    network_mode: host
+    ipc: host
+    pid: host
+    volumes:
+      - ./workspace:/workspace
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - PYTHONUNBUFFERED=1
+    stdin_open: true
+    tty: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
