@@ -1,0 +1,6 @@
+LLM/workspace/.env
+LLM/workspace/schedule.json
+LLM/workspace/input
+LLM/workspace/temp
+
+leggedrobot/workspace/.gradio
