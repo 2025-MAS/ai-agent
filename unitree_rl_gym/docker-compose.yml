@@ -1,0 +1,47 @@
+services:
+  unitree-rl-gym:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: unitree-rl-gym:latest
+    container_name: unitree-rl-gym
+    cap_add:
+      - SYS_NICE
+    ulimits:
+      rtprio: 99
+      rttime: -1
+      memlock: 8428281856
+    network_mode: host
+    ipc: host
+    pid: host
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    volumes:
+      - /dev:/dev
+      - /dev/shm:/dev/shm
+      # Mount the current project directory for development
+      - .:/opt/unitree_rl_gym
+      # Mount Isaac Gym (you need to download it first)
+      # - ../isaacgym:/opt/isaacgym
+      # Mount for persistent data
+      - unitree_data:/opt/data
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
+    working_dir: /opt/unitree_rl_gym
+    stdin_open: true
+    tty: true
+    privileged: true
+    command: bash
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+
+volumes:
+  unitree_data:
